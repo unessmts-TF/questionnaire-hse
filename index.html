@@ -1,0 +1,449 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Questionnaire HSE — Retours sur incidents récents</title>
+  <style>
+    :root{
+      --accent:#0b5d3b;
+      --muted:#6b7280;
+      --card:#ffffff;
+      --bg:#f7faf7;
+      --danger:#d9534f;
+      --glass: rgba(255,255,255,0.7);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    }
+    html,body{height:100%}
+    body{
+      margin:0;
+      background: linear-gradient(180deg,#f3f8f4 0%, var(--bg) 100%);
+      color:#0f172a;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      padding:24px;
+      display:flex;
+      justify-content:center;
+    }
+    .container{
+      width:100%;
+      max-width:980px;
+      background:var(--card);
+      border-radius:12px;
+      box-shadow: 0 6px 24px rgba(15,23,42,0.08);
+      padding:22px;
+    }
+    header{
+      display:flex;
+      gap:16px;
+      align-items:center;
+      margin-bottom:12px;
+    }
+    .logo{
+      width:84px;
+      height:84px;
+      background:var(--glass);
+      border-radius:8px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:8px;
+    }
+    .logo img{max-width:100%; max-height:100%;}
+    h1{font-size:20px;margin:0}
+    p.lead{margin:6px 0 0;color:var(--muted);font-size:13px}
+    .meta{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+    .meta > *{font-size:13px;color:var(--muted)}
+    form{margin-top:18px}
+    .card{
+      background:linear-gradient(180deg, #ffffff, #fbfffc);
+      border-radius:10px;
+      padding:14px;
+      margin-bottom:12px;
+      border:1px solid rgba(13,19,24,0.03);
+    }
+    .incident-title{font-weight:700;margin-bottom:6px}
+    .fact{font-weight:600;color:#0b5d3b;margin-bottom:6px}
+    .lessons{margin:6px 0 10px;color:var(--muted);font-size:14px}
+    label{display:block;font-size:13px;margin-bottom:6px;font-weight:600}
+    input[type="text"], input[type="date"], select, textarea{
+      width:100%;
+      padding:8px 10px;
+      border-radius:8px;
+      border:1px solid #e6eef0;
+      font-size:14px;
+      box-sizing:border-box;
+      resize:vertical;
+    }
+    textarea{min-height:72px}
+    .row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .row-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+    .btn{
+      display:inline-block;
+      padding:10px 14px;
+      border-radius:8px;
+      background:var(--accent);
+      color:white;
+      border:none;
+      cursor:pointer;
+      font-weight:700;
+      font-size:14px;
+    }
+    .btn.ghost{background:transparent;color:var(--accent);border:1px solid var(--accent)}
+    .btn.danger{background:var(--danger)}
+    .small{font-size:13px;padding:8px 10px}
+    .hint{color:var(--muted);font-size:13px;margin-top:6px}
+    .responses{margin-top:18px}
+    table{width:100%;border-collapse:collapse;font-size:13px}
+    th,td{padding:8px;border-bottom:1px solid #eef3ee;text-align:left}
+    th{background:#f7faf7;font-weight:700}
+    .flex{display:flex;gap:8px;flex-wrap:wrap}
+    .footer-note{margin-top:14px;color:var(--muted);font-size:13px}
+    @media (max-width:720px){
+      .row{grid-template-columns:1fr}
+      .row-3{grid-template-columns:1fr}
+      header{flex-direction:row}
+    }
+  </style>
+</head>
+<body>
+  <div class="container" role="main" aria-labelledby="page-title">
+    <header>
+      <div class="logo" title="OCP Morocco logo">
+        <!-- Replace the src below with the OCP logo file added to your repo (eg. ocp-logo.png) -->
+        <img src="ocp-logo.png" alt="OCP Morocco Logo" />
+      </div>
+      <div>
+        <h1 id="page-title">Questionnaire HSE — Retours & leçons des incidents récents</h1>
+        <p class="lead">Collecte de retours du personnel suite aux événements récents. Les réponses orienteront les actions correctives et formations.</p>
+        <div class="meta">
+          <div>Projet: PS4 / OCP Sites</div>
+          <div>Responsable HSE: [Insérer nom]</div>
+          <div>Date: <span id="today"></span></div>
+        </div>
+      </div>
+    </header>
+
+    <form id="hseForm" class="card" autocomplete="off">
+      <div style="margin-bottom:10px;">
+        <label>Votre nom (optionnel)</label>
+        <input type="text" id="respondentName" placeholder="Nom / Prénom" />
+      </div>
+
+      <div class="row" style="margin-bottom:10px;">
+        <div>
+          <label>Unité / BU</label>
+          <input type="text" id="unit" placeholder="ex: Commissioning / Maintenance" />
+        </div>
+        <div>
+          <label>Fonction</label>
+          <input type="text" id="role" placeholder="ex: Conducteur, Chef d'équipe, Superviseur HSE" />
+        </div>
+      </div>
+
+      <div style="margin-bottom:12px">
+        <label>Date de réponse</label>
+        <input type="date" id="responseDate" />
+      </div>
+
+      <!-- INCIDENT 1 -->
+      <section class="card">
+        <div class="incident-title">1) Khouribga — Incendie d’un engin D11</div>
+        <div class="fact">Fait : Le conducteur a sauté de sa machine après qu’elle ait pris feu.</div>
+        <div class="lessons">
+          Leçons clés : immobiliser un engin présentant une fuite/anomalie ; contrôle préopératoire (huile, câbles, carburant) ; extincteur embarqué conforme ; formation réaction incendie (évacuer calmement).
+        </div>
+
+        <label>Êtes-vous informé(e) des leçons ci-dessus ?</label>
+        <div class="flex" style="margin-bottom:8px;">
+          <label><input type="radio" name="inc1_awareness" value="Oui" required> Oui</label>
+          <label><input type="radio" name="inc1_awareness" value="Partiellement"> Partiellement</label>
+          <label><input type="radio" name="inc1_awareness" value="Non"> Non</label>
+        </div>
+
+        <label>Notez la priorité d'action (1 = haute, 5 = faible)</label>
+        <select id="inc1_priority">
+          <option value="1">1 — Haute</option>
+          <option value="2">2</option>
+          <option value="3">3 — Moyenne</option>
+          <option value="4">4</option>
+          <option value="5">5 — Faible</option>
+        </select>
+
+        <label>Propositions d'actions / Commentaires (ex: équipements, formation, procédures)</label>
+        <textarea id="inc1_comments" placeholder="Vos propositions pour prévenir ce type d'incident..."></textarea>
+
+        <label style="margin-top:8px">Je m'engage à (action concrète, ex: vérifier extincteur chaque matin)</label>
+        <input type="text" id="inc1_commit" placeholder="Mon engagement" />
+      </section>
+
+      <!-- INCIDENT 2 -->
+      <section class="card">
+        <div class="incident-title">2) Benguerir — Malaise du conducteur (épilepsie)</div>
+        <div class="fact">Fait : Un conducteur a eu une crise d’épilepsie en pleine conduite.</div>
+        <div class="lessons">
+          Leçons clés : vérification aptitude médicale régulière ; surveillance des signes de fatigue ; pas de travail seul ; suivi médical périodique ; arrêt immédiat et alerte médicale en cas de malaise.
+        </div>
+
+        <label>Êtes-vous informé(e) des leçons ci-dessus ?</label>
+        <div class="flex" style="margin-bottom:8px;">
+          <label><input type="radio" name="inc2_awareness" value="Oui" required> Oui</label>
+          <label><input type="radio" name="inc2_awareness" value="Partiellement"> Partiellement</label>
+          <label><input type="radio" name="inc2_awareness" value="Non"> Non</label>
+        </div>
+
+        <label>Propositions / mesures médicales ou organisationnelles</label>
+        <textarea id="inc2_comments" placeholder="ex: fréquence des examens médicaux, procédures de surveillance..."></textarea>
+
+        <label>Je m'engage à</label>
+        <input type="text" id="inc2_commit" placeholder="ex: signaler tout cas suspect, pas de travail seul..." />
+      </section>
+
+      <!-- INCIDENT 3 -->
+      <section class="card">
+        <div class="incident-title">3) Dessalement — Chute d’un échafaudeur (~4 m)</div>
+        <div class="fact">Fait : Un échafaudeur est tombé d'environ 4 m lors du démontage.</div>
+        <div class="lessons">
+          Leçons clés : port du harnais et ancrage obligatoire ; vérifier stabilité avant retirer éléments porteurs ; supervision HSE durant montage/démontage ; n'utiliser que des échafaudages certifiés, inspectés et tagués ; formation spécifique pour travail en hauteur.
+        </div>
+
+        <label>Êtes-vous informé(e) des leçons ci-dessus ?</label>
+        <div class="flex" style="margin-bottom:8px;">
+          <label><input type="radio" name="inc3_awareness" value="Oui" required> Oui</label>
+          <label><input type="radio" name="inc3_awareness" value="Partiellement"> Partiellement</label>
+          <label><input type="radio" name="inc3_awareness" value="Non"> Non</label>
+        </div>
+
+        <label>Propositions (formation, inspections, procédures)</label>
+        <textarea id="inc3_comments" placeholder="ex: checklist d'inspection, fréquence, responsable..."></textarea>
+
+        <label>Je m'engage à</label>
+        <input type="text" id="inc3_commit" placeholder="ex: vérifier l'ancrage avant travail en hauteur..." />
+      </section>
+
+      <!-- TRANSVERSAL -->
+      <section class="card">
+        <div class="incident-title">4) Leçons transversales</div>
+        <div class="lessons">
+          Zéro tolérance pour équipements non conformes ; surveillance médicale ; arrêt immédiat en cas de doute ; les 'safety stops' sont essentiels pour prévenir répétition des accidents.
+        </div>
+
+        <label>Selon vous, quelles sont les 3 actions prioritaires transversales à mettre en place ?</label>
+        <textarea id="transversal_actions" placeholder="1) ...&#10;2) ...&#10;3) ..."></textarea>
+
+        <label>Souhaitez-vous être contacté pour contribution (ex: atelier de prévention) ?</label>
+        <div class="flex" style="margin-bottom:8px;">
+          <label><input type="radio" name="contact_me" value="Oui" required> Oui</label>
+          <label><input type="radio" name="contact_me" value="Non"> Non</label>
+        </div>
+
+      </section>
+
+      <div style="display:flex;gap:8px;align-items:center;margin-top:6px;">
+        <button type="submit" class="btn">Soumettre la réponse</button>
+        <button type="button" id="downloadAll" class="btn ghost small">Télécharger CSV (toutes réponses)</button>
+        <button type="button" id="copyJson" class="btn ghost small">Copier JSON</button>
+        <button type="button" id="clearLocal" class="btn danger small">Effacer les réponses locales</button>
+      </div>
+
+      <div class="footer-note">Les réponses sont stockées localement dans votre navigateur. Pour centraliser les données: exporter le CSV et envoyer au HSE Manager ou intégrer une solution de collecte (Formspree, Google Forms, backend sécurisé).</div>
+
+    </form>
+
+    <section class="responses card" aria-live="polite">
+      <h2 style="margin-top:0;font-size:16px">Réponses collectées</h2>
+      <div style="max-height:260px;overflow:auto">
+        <table id="responsesTable" aria-label="table des réponses">
+          <thead>
+            <tr>
+              <th>Date</th><th>Nom</th><th>Unité</th><th>Inc1</th><th>Inc2</th><th>Inc3</th><th>Transversal / Actions</th>
+            </tr>
+          </thead>
+          <tbody id="responsesBody">
+            <!-- rows generated by JS -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    // Set today's date in header
+    const todayEl = document.getElementById('today');
+    const iso = new Date().toISOString().slice(0,10);
+    todayEl.textContent = new Date().toLocaleDateString('fr-FR');
+
+    // Default date input to today
+    document.getElementById('responseDate').value = iso;
+
+    // Local storage key
+    const STORAGE_KEY = 'hse_questionnaire_responses_v1';
+
+    // Load existing responses
+    function loadResponses(){
+      const raw = localStorage.getItem(STORAGE_KEY);
+      try{
+        return raw ? JSON.parse(raw) : [];
+      }catch(e){
+        console.error('Corrupted local data, resetting', e);
+        localStorage.removeItem(STORAGE_KEY);
+        return [];
+      }
+    }
+
+    function saveResponses(arr){
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(arr));
+    }
+
+    function renderResponses(){
+      const arr = loadResponses();
+      const tbody = document.getElementById('responsesBody');
+      tbody.innerHTML = '';
+      if(arr.length === 0){
+        tbody.innerHTML = '<tr><td colspan="7" style="color:var(--muted)">Aucune réponse enregistrée</td></tr>';
+        return;
+      }
+      arr.forEach(r=>{
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${escapeHtml(r.responseDate||'')}</td>
+          <td>${escapeHtml(r.respondentName||'Anonyme')}</td>
+          <td>${escapeHtml(r.unit||'')}</td>
+          <td>${escapeHtml(r.inc1_awareness||'')}</td>
+          <td>${escapeHtml(r.inc2_awareness||'')}</td>
+          <td>${escapeHtml(r.inc3_awareness||'')}</td>
+          <td>${escapeHtml((r.transversal_actions||'').slice(0,80))}${(r.transversal_actions && r.transversal_actions.length>80?'…':'')}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    // Simple escape to prevent HTML injection in table cells
+    function escapeHtml(s){ if(!s) return ''; return String(s).replace(/[&<>"']/g, function(m){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]; }); }
+
+    // Form submit handler
+    document.getElementById('hseForm').addEventListener('submit', function(e){
+      e.preventDefault();
+      const form = e.target;
+
+      // gather
+      const resp = {
+        submittedAt: new Date().toISOString(),
+        responseDate: form.querySelector('#responseDate').value || iso,
+        respondentName: form.querySelector('#respondentName').value.trim(),
+        unit: form.querySelector('#unit').value.trim(),
+        role: form.querySelector('#role').value.trim(),
+        inc1_awareness: form.querySelector('input[name="inc1_awareness"]:checked')?.value || '',
+        inc1_priority: form.querySelector('#inc1_priority').value,
+        inc1_comments: form.querySelector('#inc1_comments').value.trim(),
+        inc1_commit: form.querySelector('#inc1_commit').value.trim(),
+        inc2_awareness: form.querySelector('input[name="inc2_awareness"]:checked')?.value || '',
+        inc2_comments: form.querySelector('#inc2_comments').value.trim(),
+        inc2_commit: form.querySelector('#inc2_commit').value.trim(),
+        inc3_awareness: form.querySelector('input[name="inc3_awareness"]:checked')?.value || '',
+        inc3_comments: form.querySelector('#inc3_comments').value.trim(),
+        inc3_commit: form.querySelector('#inc3_commit').value.trim(),
+        transversal_actions: form.querySelector('#transversal_actions').value.trim(),
+        contact_me: form.querySelector('input[name="contact_me"]:checked')?.value || 'Non'
+      };
+
+      // Basic validation: ensure the three radio groups have answers (they are required). If missing, browser should prevent, but extra check:
+      if(!resp.inc1_awareness || !resp.inc2_awareness || !resp.inc3_awareness || !resp.contact_me){
+        alert('Merci de répondre aux questions obligatoires pour chaque incident et contact.');
+        return;
+      }
+
+      // Save
+      const arr = loadResponses();
+      arr.unshift(resp); // latest first
+      saveResponses(arr);
+      renderResponses();
+
+      // Friendly confirmation + reset voluntary fields (keep date)
+      alert('Merci — votre réponse a été enregistrée localement. Téléchargez le CSV pour centraliser les données.');
+      // reset free text and name / commitments but keep date
+      form.querySelector('#respondentName').value = '';
+      form.querySelector('#unit').value = '';
+      form.querySelector('#role').value = '';
+      form.querySelector('#inc1_comments').value = '';
+      form.querySelector('#inc1_commit').value = '';
+      form.querySelector('#inc2_comments').value = '';
+      form.querySelector('#inc2_commit').value = '';
+      form.querySelector('#inc3_comments').value = '';
+      form.querySelector('#inc3_commit').value = '';
+      form.querySelector('#transversal_actions').value = '';
+      // uncheck radios
+      ['inc1_awareness','inc2_awareness','inc3_awareness','contact_me'].forEach(name=>{
+        const checked = form.querySelector(`input[name="${name}"]:checked`);
+        if(checked) checked.checked = false;
+      });
+    });
+
+    // CSV exporter
+    function toCSV(rows){
+      // rows: array of objects; build header from keys of first object
+      if(!rows || rows.length === 0) return '';
+      const keys = [
+        'submittedAt','responseDate','respondentName','unit','role',
+        'inc1_awareness','inc1_priority','inc1_comments','inc1_commit',
+        'inc2_awareness','inc2_comments','inc2_commit',
+        'inc3_awareness','inc3_comments','inc3_commit',
+        'transversal_actions','contact_me'
+      ];
+      const esc = v => {
+        if(v===null||v===undefined) return '';
+        const s = String(v).replace(/"/g,'""');
+        return `"${s}"`;
+      };
+      const lines = [];
+      lines.push(keys.map(esc).join(','));
+      rows.forEach(r=>{
+        lines.push(keys.map(k=>esc(r[k])).join(','));
+      });
+      return lines.join('\r\n');
+    }
+
+    document.getElementById('downloadAll').addEventListener('click', function(){
+      const data = loadResponses();
+      if(!data || data.length===0){
+        alert('Aucune réponse à télécharger.');
+        return;
+      }
+      const csv = toCSV(data);
+      const blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'hse_questionnaire_responses.csv';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    });
+
+    document.getElementById('copyJson').addEventListener('click', async function(){
+      const data = loadResponses();
+      if(!data || data.length===0){
+        alert('Aucune réponse à copier.');
+        return;
+      }
+      try{
+        await navigator.clipboard.writeText(JSON.stringify(data, null, 2));
+        alert('JSON copié dans le presse-papiers. Coller dans un email ou un fichier pour centraliser.');
+      }catch(e){
+        prompt('Impossible de copier automatiquement. Voici le JSON :', JSON.stringify(data, null, 2));
+      }
+    });
+
+    document.getElementById('clearLocal').addEventListener('click', function(){
+      if(confirm('Supprimer toutes les réponses stockées localement ? Cette opération est irréversible.')){
+        localStorage.removeItem(STORAGE_KEY);
+        renderResponses();
+      }
+    });
+
+    // initial render
+    renderResponses();
+  </script>
+</body>
+</html>
